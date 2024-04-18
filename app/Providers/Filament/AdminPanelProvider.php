@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\EmployeeResource\Widgets\EmployeeStatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -17,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use pxlrbt\FilamentSpotlight\SpotlightPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,9 +29,21 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // ->registration()
+            // ->passwordReset()
+            // ->emailVerification()
             ->colors([
-                'primary' => Color::Amber,
+                // 'primary' => Color::Slate,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+                'primary' => Color::Slate,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
+            // ->unsavedChangesAlerts()
+            ->spa()
+            ->sidebarCollapsibleOnDesktop(true)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -39,6 +53,10 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                EmployeeStatsOverview::class,
+            ])
+            ->plugins([
+                SpotlightPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,
